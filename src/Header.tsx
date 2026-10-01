@@ -3,15 +3,33 @@ import { useContext } from "react";
 import { Link } from "@tanstack/react-router";
 
 export default function Header() {
-  // top of function
   const [cart] = useContext(CartContext);
+
   return (
-    <nav>
-      <Link to={"/"}>
-        <h1 className="logo">Padre Gino's Pizza</h1>
+    <nav
+      className=" grid w-full border-b border-[#ccc] [grid-template-areas:'._logo_logo_logo_cart']
+      "
+    >
+      <Link
+        to={"/"}
+        className=" flex items-center justify-center [grid-area:logo]"
+      >
+        <h1
+          className="h-[110px] w-[inherit] border-b border-[#ccc] bg-left bg-no-repeat pt-5 pb-5 [content:url('/public/padre_gino.svg')] [grid-area:logo]"
+        >
+          Padre Gino's Pizza
+        </h1>
       </Link>
-      <div className="nav-cart">
-        🛒<span className="nav-cart-number">{cart.length}</span>
+
+      <div
+        className="flex items-center justify-center text-[40px] [grid-area:cart]"
+      >
+        🛒
+        <span
+          className=" relative top-[-17px] left-[-17px] flex h-5 w-5 items-center justify-center rounded-full bg-[#33670a] text-[18px] text-white"
+        >
+          {cart.length}
+        </span>
       </div>
     </nav>
   );
