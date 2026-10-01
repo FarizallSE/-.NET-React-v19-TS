@@ -153,6 +153,21 @@ h2::after {
   }
 }
 
+@layer table {
+  .col {
+    @apply border-b border-[#ddd] even:bg-[#f6fef0] last-of-type:border-b-2 last-of-type:border-secondary;
+  };
+  .row {
+    @apply px-3.75 py-3 text-center;
+  };
+  .head {
+    @apply px-3.75 py-3 text-center bg-secondary text-white;
+  };
+  .table {
+    @apply my-6.25 w-full min-w-100 border-collapse border border-[#ddd] font-sans text-[0.9em];
+  }
+}
+
 .order {
   width: 100%;
   margin-left: 5%;
@@ -366,14 +381,14 @@ button:disabled {
   margin-bottom: 10px;
 }
 
-.past-orders {
+/* .past-orders {
   min-height: 650px;
   max-width: 900px;
   width: 90%;
   margin: 0 auto;
-}
+} */
 
-table {
+/* table {
   width: 100%;
   border-collapse: collapse;
   margin: 25px 0;
@@ -417,7 +432,7 @@ tbody tr:last-of-type {
   font-family: var(--font);
   color: var(--primary);
   font-size: 20px;
-}
+} */
 
 #modal {
   background-color: rgba(0, 0, 0, 0.9);
@@ -442,9 +457,9 @@ tbody tr:last-of-type {
   border-radius: 30px;
   background: var(--background);
 }
-td img {
+/* td img {
   width: 50px;
-}
+} */
 
 .error-boundary {
   min-height: 400px;
