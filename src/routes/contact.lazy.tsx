@@ -26,7 +26,7 @@ export function ContactRoute() {
   });
 
   return (
-    <div className=" align-center justify-items-center">
+    <div className="align-center justify-items-center">
       <h2>Contact</h2>
       {mutation.isSuccess ? (
         <h3 className="color-secondary align-center m-[50px] text-sm">Submitted!</h3>
