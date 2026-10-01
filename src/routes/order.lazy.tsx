@@ -11,17 +11,21 @@ export const Route = createLazyFileRoute("/order")({
   component: Order,
 });
 
+// shared by the three size radios: the label is the visible "card", the input is visually hidden
+const sizeLabelClass =
+  "mx-3.75 mb-2.5 inline-flex h-20 w-20 cursor-pointer items-center justify-center rounded-[5px] border border-[#999] bg-border text-[#999] peer-checked:bg-white peer-checked:text-[#333] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-primary";
+
 const intl = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
 });
+
 
 export function Order() {
   const [pizzaType, setPizzaType] = useState("pepperoni");
   const [pizzaSize, setPizzaSize] = useState<PizzaSize>("M");
   const [cart, setCart] = useContext(CartContext);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
-
   const { data, isPending: isLoadingPizzas } = useQuery<PizzaType[]>({
     queryKey: ["pizzas"],
     queryFn: () => getPizzas(),
@@ -60,9 +64,10 @@ export function Order() {
   }
 
   return (
-    <div className="order">
+    <div className="mx-auto grid max-w-325 grid-cols-1 gap-12.5 lg:grid-cols-[2fr_1fr]">
       <h2>Create Order</h2>
       <form
+        className="flex flex-col md:flex-row md:justify-between"
         onSubmit={(e) => {
           e.preventDefault();
           if (!selectedPizza || !price) {
@@ -71,10 +76,13 @@ export function Order() {
           setCart([...cart, { pizza: selectedPizza, size: pizzaSize, price }]);
         }}
       >
-        <div>
-          <div>
-            <label htmlFor="pizza-type">Pizza Type</label>
+        <div className="my-2.5 w-full border-r border-border p-3.75 text-center">
+          <div className="my-2.5 text-center">
+            <label
+              className="mb-2.5 block text-[20px] text-secondary"
+              htmlFor="pizza-type">Pizza Type</label>
             <select
+              className="form-select mb-7.5 block w-full py-1.25 pl-1.25 text-[16px]"
               onChange={(e) => setPizzaType(e.target.value)}
               name="pizza-type"
               value={pizzaType}
@@ -86,11 +94,12 @@ export function Order() {
               ))}
             </select>
           </div>
-          <div>
+          <div className="my-2.5 text-center">
             <label htmlFor="pizza-size">Pizza Size</label>
-            <div>
+            <div className="my-2.5 text-center">
               <span>
                 <input
+                  className="peer sr-only"
                   checked={pizzaSize === "S"}
                   onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
                   type="radio"
@@ -98,10 +107,13 @@ export function Order() {
                   value="S"
                   id="pizza-s"
                 />
-                <label htmlFor="pizza-s">Small</label>
+                <label htmlFor="pizza-s" className={sizeLabelClass}>
+                  Small
+                </label>
               </span>
               <span>
                 <input
+                  className="peer sr-only"
                   checked={pizzaSize === "M"}
                   onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
                   type="radio"
@@ -109,10 +121,13 @@ export function Order() {
                   value="M"
                   id="pizza-m"
                 />
-                <label htmlFor="pizza-m">Medium</label>
+                <label htmlFor="pizza-m" className={sizeLabelClass}>
+                  Medium
+                </label>
               </span>
               <span>
                 <input
+                  className="peer sr-only"
                   checked={pizzaSize === "L"}
                   onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
                   type="radio"
@@ -120,11 +135,13 @@ export function Order() {
                   value="L"
                   id="pizza-l"
                 />
-                <label htmlFor="pizza-l">Large</label>
+                <label htmlFor="pizza-l" className={sizeLabelClass}>
+                  Large
+                </label>
               </span>
             </div>
           </div>
-          <button type="submit">Add to Cart</button>
+          <button type="submit" className="btn border border-border p-3 border-primary" >Add to Cart</button>
         </div>
         <div className="order-pizza">
           {loading || !selectedPizza ? (

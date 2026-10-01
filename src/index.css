@@ -1,0 +1,9 @@
+/* mendeklarasikan urutan layer */
+@layer theme, base, legacy, components, utilities;
+/* mengimpor stylesheet */
+@import "tailwindcss/theme.css" layer(theme);
+@import "./legacy.css" layer(legacy);
+@import "tailwindcss/utilities.css" layer(utilities);
+@plugin "@tailwindcss/forms" {
+    strategy: "class";
+}

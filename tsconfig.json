@@ -10,7 +10,8 @@
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "moduleDetection": "force",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["vite/client", "@vitest/browser/providers/playwright"]
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

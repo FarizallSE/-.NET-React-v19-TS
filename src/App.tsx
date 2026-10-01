@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import "./index.css";
 // add at top
 // remove useState import from react import
 import { RouterProvider, createRouter } from "@tanstack/react-router";

@@ -1,4 +1,4 @@
-import { type CartItem} from "./contexts";
+import { type CartItem } from "./contexts";
 
 interface Props {
   cart: CartItem[];
@@ -10,7 +10,7 @@ const intl = new Intl.NumberFormat("en-US", {
   currency: "USD", // feel free to change to your local currency
 });
 
-export default function Cart({ cart, checkout } : Props) {
+export default function Cart({ cart, checkout }: Props) {
   let total = 0;
   for (let i = 0; i < cart.length; i++) {
     const current = cart[i];
@@ -18,7 +18,7 @@ export default function Cart({ cart, checkout } : Props) {
   }
 
   return (
-    <div className="cart">
+    <div className="border-t border-border p-3.75 text-center leading-normal lg:border-t-0 lg:border-l">
       <h2>Cart</h2>
       <ul>
         {cart.map((item, index) => (
@@ -30,7 +30,9 @@ export default function Cart({ cart, checkout } : Props) {
         ))}
       </ul>
       <p>Total: {intl.format(total)}</p>
-      <button onClick={checkout}>Checkout</button>
+      <button className="btn border p-2" onClick={checkout}>
+        Checkout
+      </button>
     </div>
   );
 }
