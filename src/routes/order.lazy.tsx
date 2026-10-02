@@ -133,7 +133,7 @@ export function Order() {
               Add to Cart
             </button>
           </div>
-          <div className="order-pizza">
+          <div className="border-t border-border p-3.75 text-center leading-normal lg:border-l">
             {loading || !selectedPizza ? (
               <h3>Loading...</h3>
             ) : (
