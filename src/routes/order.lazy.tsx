@@ -1,11 +1,13 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import Pizza from "../Pizza";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import Cart from "../Cart";
-import { CartContext } from "../contexts";
+// import { CartContext } from "../contexts";
 import getPizzas from "../api/getPizzas";
 import { type Pizza as PizzaType, type PizzaSize } from "../APIResponseTypes";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { addToCart, clearCart, selectedCartItems } from "../cartSlice";
 
 export const Route = createLazyFileRoute("/order")({
   component: Order,
@@ -19,8 +21,10 @@ const intl = new Intl.NumberFormat("en-US", {
 export function Order() {
   const [pizzaType, setPizzaType] = useState("pepperoni");
   const [pizzaSize, setPizzaSize] = useState<PizzaSize>("M");
-  const [cart, setCart] = useContext(CartContext);
+  // const [cart, setCart] = useContext(CartContext);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const cart = useAppSelector(selectedCartItems);
+  const dispatch = useAppDispatch();
 
   const { data, isPending: isLoadingPizzas } = useQuery<PizzaType[]>({
     queryKey: ["pizzas"],
@@ -55,7 +59,8 @@ export function Order() {
       }),
     });
 
-    setCart([]);
+    // setCart([]);
+    dispatch(clearCart());
     setCheckoutLoading(false);
   }
 
@@ -70,10 +75,9 @@ export function Order() {
             if (!selectedPizza || !price) {
               return;
             }
-            setCart([
-              ...cart,
-              { pizza: selectedPizza, size: pizzaSize, price },
-            ]);
+            dispatch(
+              addToCart({ pizza: selectedPizza, size: pizzaSize, price }),
+            );
           }}
         >
           <div className="text-center p-3.75 md:border-r md:border-border">

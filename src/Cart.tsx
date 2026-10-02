@@ -1,4 +1,5 @@
-import { type CartItem } from "./contexts";
+// import { type CartItem } from "./contexts";
+import { type CartItem } from "./cartSlice";
 
 interface Props {
   cart: CartItem[];

@@ -1,40 +1,46 @@
 import { cleanup, render, screen, within } from "@testing-library/react";
 import {
-  RouterProvider,
-  createMemoryHistory,
-  createRootRoute,
-  createRoute,
-  createRouter,
+  // RouterProvider,
+  // createMemoryHistory,
+  // createRootRoute,
+  // createRoute,
+  // createRouter,
 } from "@tanstack/react-router";
-import { afterEach, expect, test, vi } from "vitest";
+import { afterEach, expect, test} from "vitest";
 import Header from "../Header";
-import { CartContext, type CartItem } from "../contexts";
+// import { CartContext, type CartItem } from "../contexts";
+import { Provider } from "react-redux";
+import { makeStore } from "../store";
+import type { CartItem } from "../cartSlice";
 
 afterEach(cleanup);
 
 // Header memakai <Link> dari TanStack Router, jadi komponennya hanya bisa
 // dirender di dalam RouterProvider. Kita pakai router in-memory supaya test
 // tidak bergantung pada URL browser.
-const rootRoute = createRootRoute({ component: Header });
-const indexRoute = createRoute({ getParentRoute: () => rootRoute, path: "/" });
+// const rootRoute = createRootRoute({ component: Header });
+// const indexRoute = createRoute({ getParentRoute: () => rootRoute, path: "/" });
 
-type RouterUnderTest = Parameters<typeof RouterProvider>[0]["router"];
+// type RouterUnderTest = Parameters<typeof RouterProvider>[0]["router"];
 
-function renderHeader(cart: CartItem[]) {
-  const router = createRouter({
-    routeTree: rootRoute.addChildren([indexRoute]),
-    history: createMemoryHistory({ initialEntries: ["/"] }),
-  });
+// function renderHeader(cart: CartItem[]) {
+//   const router = createRouter({
+//     routeTree: rootRoute.addChildren([indexRoute]),
+//     history: createMemoryHistory({ initialEntries: ["/"] }),
+//   });
 
-  render(
-    <CartContext.Provider value={[cart, vi.fn()]}>
-      {/* RouterProvider secara default mengasumsikan router hasil generate
-          (src/routeTree.gen.ts). Router test ini route tree-nya dibuat manual,
-          jadi satu-satunya cara tanpa menyentuh file aplikasi adalah cast ini. */}
-      <RouterProvider router={router as unknown as RouterUnderTest} />
-    </CartContext.Provider>,
-  );
-}
+//   render(
+//     // <CartContext.Provider value={[cart, vi.fn()]}>
+//     //   {/* RouterProvider secara default mengasumsikan router hasil generate
+//     //       (src/routeTree.gen.ts). Router test ini route tree-nya dibuat manual,
+//     //       jadi satu-satunya cara tanpa menyentuh file aplikasi adalah cast ini. */}
+//     //   <RouterProvider router={router as unknown as RouterUnderTest} />
+//     // </CartContext.Provider>,
+//     <Provider store={makeStore()}>
+//         <Header />
+//     </Provider>
+//   );
+// }
 
 const cart: CartItem[] = [
   {
@@ -64,7 +70,12 @@ const cart: CartItem[] = [
 ];
 
 test("shows the number of pizzas in the cart", async () => {
-  renderHeader(cart);
+  // renderHeader(cart);
+  render(
+    <Provider store={makeStore({cart: {items : cart}})}>
+      <Header />
+    </Provider>
+  );
 
   expect((await screen.findByRole("heading", { level: 1 })).textContent).toBe(
     "Padre Gino's Pizza",
@@ -74,7 +85,11 @@ test("shows the number of pizzas in the cart", async () => {
 });
 
 test("shows a zero count when the cart is empty", () => {
-  renderHeader([]);
+  render(
+    <Provider store={makeStore()}>
+      <Header />
+    </Provider>
+  );
 
   const nav = screen.getByRole("navigation");
 
@@ -83,7 +98,12 @@ test("shows a zero count when the cart is empty", () => {
 });
 
 test("counts every pizza in the cart", () => {
-  renderHeader(cart);
+  // renderHeader(cart);
+  render(
+    <Provider store={makeStore({cart : {items : cart}})}>
+      <Header></Header>
+    </Provider>
+  )
 
   const nav = screen.getByRole("navigation");
 
