@@ -1,13 +1,14 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
 import Pizza from "../Pizza";
 import { useState } from "react";
 import Cart from "../Cart";
 // import { CartContext } from "../contexts";
-import getPizzas from "../api/getPizzas";
+// import getPizzas from "../api/getPizzas";
 import { type Pizza as PizzaType, type PizzaSize } from "../APIResponseTypes";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { addToCart, clearCart, selectedCartItems } from "../cartSlice";
+import { useGetPizzasQuery } from "../api/pizzaApi";
 
 export const Route = createLazyFileRoute("/order")({
   component: Order,
@@ -22,18 +23,21 @@ export function Order() {
   const [pizzaType, setPizzaType] = useState("pepperoni");
   const [pizzaSize, setPizzaSize] = useState<PizzaSize>("M");
   // const [cart, setCart] = useContext(CartContext);
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  // const [checkoutLoading, setCheckoutLoading] = useState(false);
   const cart = useAppSelector(selectedCartItems);
   const dispatch = useAppDispatch();
+  const { data: pizzaTypes = [], isLoading: isLoadingPizzas } = useGetPizzasQuery();
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const loading = isLoadingPizzas || isCheckingOut;
 
-  const { data, isPending: isLoadingPizzas } = useQuery<PizzaType[]>({
-    queryKey: ["pizzas"],
-    queryFn: () => getPizzas(),
-  });
+  // const { data, isPending: isLoadingPizzas } = useQuery<PizzaType[]>({
+  //   queryKey: ["pizzas"],
+  //   queryFn: () => getPizzas(),
+  // });
 
-  const pizzaTypes = data ?? [];
+  // const pizzaTypes = data ?? [];
 
-  const loading = isLoadingPizzas || checkoutLoading;
+  // const loading = isLoadingPizzas || checkoutLoading;
 
   let price: string | undefined;
   let selectedPizza: PizzaType | undefined;
@@ -47,7 +51,7 @@ export function Order() {
 
   // inside the render body
   async function checkout() {
-    setCheckoutLoading(true);
+    setIsCheckingOut(true);
 
     await fetch("/api/order", {
       method: "POST",
@@ -61,7 +65,7 @@ export function Order() {
 
     // setCart([]);
     dispatch(clearCart());
-    setCheckoutLoading(false);
+    setIsCheckingOut(false);
   }
 
   return (
