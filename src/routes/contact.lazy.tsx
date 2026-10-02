@@ -35,7 +35,9 @@ export function ContactRoute() {
           <input name="name" placeholder="Name" />
           <input type="email" name="email" placeholder="Email" />
           <textarea placeholder="Message" name="message"></textarea>
-          <button>Submit</button>
+          <button className="btn" type="submit">
+            Submit
+          </button>
         </form>
       )}
     </div>
