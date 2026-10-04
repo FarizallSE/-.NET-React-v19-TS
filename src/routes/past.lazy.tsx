@@ -1,10 +1,17 @@
 import { useState } from "react";
-import { skipToken, useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@reduxjs/toolkit/query";
+import { skipToken } from "@reduxjs/toolkit/query";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import getPastOrders from "../api/getPastOrders";
-import getPastOrder from "../api/getPastOrder";
-import type { PastOrder, PastOrderDetail, PastOrderItem } from "../APIResponseTypes";
+// import getPastOrders from "../api/getPastOrders";
+// import getPastOrder from "../api/getPastOrder";
+import type {
+  PastOrder,
+  // PastOrderDetail,
+  PastOrderItem,
+} from "../APIResponseTypes";
 import Modal from "../Modal";
+import { useGetPastOrderQuery, useGetPastOrdersQuery } from "../api/pizzaApi";
 
 export const Route = createLazyFileRoute("/past")({
   component: PastOrdersRoute,
@@ -21,18 +28,22 @@ function PastOrdersRoute() {
   const [focusedOrder, setFocusedOrder] = useState<number>();
 
   const [page, setPage] = useState(1);
-  const { isLoading, data } = useQuery<PastOrder[]>({
-    queryKey: ["past-order", page],
-    queryFn: () => getPastOrder(page),
-    staleTime: 30000,
-  });
+  // const { isLoading, data } = useQuery<PastOrder[]>({
+  //   queryKey: ["past-order", page],
+  //   queryFn: () => getPastOrder(page),
+  //   staleTime: 30000,
+  // });
+  const {data, isLoading} = useGetPastOrdersQuery(page);
 
-  const { isLoading: isLoadingPastOrder, data: pastOrderData } =
-    useQuery<PastOrderDetail>({
-      queryKey: ["past-order-detail", focusedOrder],
-      queryFn: focusedOrder ? () => getPastOrders(focusedOrder) : skipToken,
-      staleTime: 24 * 60 * 60 * 1000, // one day in milliseconds,
-    });
+  // const { isLoading: isLoadingPastOrder, data: pastOrderData } =
+  //   useQuery<PastOrderDetail>({
+  //     queryKey: ["past-order-detail", focusedOrder],
+  //     queryFn: focusedOrder ? () => getPastOrders(focusedOrder) : skipToken,
+  //     staleTime: 24 * 60 * 60 * 1000, // one day in milliseconds,
+  //   });
+
+  const {isLoading: isLoadingPastOrder, data: pastOrderData } = useGetPastOrderQuery(focusedOrder ?? skipToken);
+
   if (isLoading) {
     return (
       <div className="mx-auto w-[90%] min-h-162.5 max-w-225 px-3.75">
@@ -149,10 +160,7 @@ function PastOrdersRoute() {
           ) : (
             <p>Memuat Data...</p>
           )}
-          <button
-            className="btn"
-            onClick={() => setFocusedOrder(undefined)}
-          >
+          <button className="btn" onClick={() => setFocusedOrder(undefined)}>
             Close
           </button>
         </Modal>
