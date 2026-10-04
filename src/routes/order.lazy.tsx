@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 // import { useQuery } from "@tanstack/react-query";
 import Pizza from "../Pizza";
-import { useState } from "react";
+// import { useState } from "react";
 import Cart from "../Cart";
 // import { CartContext } from "../contexts";
 // import getPizzas from "../api/getPizzas";
@@ -14,7 +14,7 @@ import {
   selectedPizzaType,
   selectedPizzaSize,
 } from "../orderSlice";
-import { useGetPizzasQuery } from "../api/pizzaApi";
+import { useGetPizzasQuery, usePlaceOrderMutation } from "../api/pizzaApi";
 
 export const Route = createLazyFileRoute("/order")({
   component: Order,
@@ -30,6 +30,7 @@ export function Order() {
   // const [pizzaSize, setPizzaSize] = useState<PizzaSize>("M");
   const pizzaType = useAppSelector(selectedPizzaType);
   const pizzaSize = useAppSelector(selectedPizzaSize);
+  const [placeOrder, { isLoading: isPlacingOrder }] = usePlaceOrderMutation();
 
   // const [cart, setCart] = useContext(CartContext);
   // const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -37,8 +38,8 @@ export function Order() {
   const dispatch = useAppDispatch();
   const { data: pizzaTypes = [], isLoading: isLoadingPizzas } =
     useGetPizzasQuery();
-  const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const loading = isLoadingPizzas || isCheckingOut;
+  // const [isCheckingOut, setIsCheckingOut] = useState(false);
+  // const loading = isLoadingPizzas || isCheckingOut;
 
   // const { data, isPending: isLoadingPizzas } = useQuery<PizzaType[]>({
   //   queryKey: ["pizzas"],
@@ -48,6 +49,7 @@ export function Order() {
   // const pizzaTypes = data ?? [];
 
   // const loading = isLoadingPizzas || checkoutLoading;
+  const loading = isLoadingPizzas || isPlacingOrder;
 
   let price: string | undefined;
   let selectedPizza: PizzaType | undefined;
@@ -61,21 +63,22 @@ export function Order() {
 
   // inside the render body
   async function checkout() {
-    setIsCheckingOut(true);
+    // setIsCheckingOut(true);
 
-    await fetch("/api/order", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        cart,
-      }),
-    });
+    // await fetch("/api/order", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     cart,
+    //   }),
+    // });
 
+    await placeOrder(cart);
     // setCart([]);
     dispatch(clearCart());
-    setIsCheckingOut(false);
+    // setIsCheckingOut(false);
   }
 
   return (
@@ -115,7 +118,9 @@ export function Order() {
                 <span>
                   <input
                     checked={pizzaSize === "S"}
-                    onChange={(e) => dispatch(setPizzaSize(e.target.value as PizzaSize))}
+                    onChange={(e) =>
+                      dispatch(setPizzaSize(e.target.value as PizzaSize))
+                    }
                     type="radio"
                     name="pizza-size"
                     value="S"
@@ -126,7 +131,9 @@ export function Order() {
                 <span>
                   <input
                     checked={pizzaSize === "M"}
-                    onChange={(e) => dispatch(setPizzaSize(e.target.value as PizzaSize))}
+                    onChange={(e) =>
+                      dispatch(setPizzaSize(e.target.value as PizzaSize))
+                    }
                     type="radio"
                     name="pizza-size"
                     value="M"
@@ -137,7 +144,9 @@ export function Order() {
                 <span>
                   <input
                     checked={pizzaSize === "L"}
-                    onChange={(e) => dispatch(setPizzaSize(e.target.value as PizzaSize))}
+                    onChange={(e) =>
+                      dispatch(setPizzaSize(e.target.value as PizzaSize))
+                    }
                     type="radio"
                     name="pizza-size"
                     value="L"
