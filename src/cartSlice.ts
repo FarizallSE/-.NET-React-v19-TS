@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { createContext } from "react";
+// import { createContext } from "react";
 import type { Pizza, PizzaSize } from "./APIResponseTypes";
 
 export interface CartItem {
@@ -39,6 +39,6 @@ export const { selectedCartItems, selectedCartCount } = cartSlice.selectors;
 
 
 
-export const CartContext = createContext<
-  [CartItem[], (cart: CartItem[]) => void]
->([[], () => {}]);
+// export const CartContext = createContext<
+//   [CartItem[], (cart: CartItem[]) => void]
+// >([[], () => {}]);

@@ -8,6 +8,12 @@ import Cart from "../Cart";
 import { type Pizza as PizzaType, type PizzaSize } from "../APIResponseTypes";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { addToCart, clearCart, selectedCartItems } from "../cartSlice";
+import {
+  setPizzaType,
+  setPizzaSize,
+  selectedPizzaType,
+  selectedPizzaSize,
+} from "../orderSlice";
 import { useGetPizzasQuery } from "../api/pizzaApi";
 
 export const Route = createLazyFileRoute("/order")({
@@ -20,13 +26,17 @@ const intl = new Intl.NumberFormat("en-US", {
 });
 
 export function Order() {
-  const [pizzaType, setPizzaType] = useState("pepperoni");
-  const [pizzaSize, setPizzaSize] = useState<PizzaSize>("M");
+  // const [pizzaType, setPizzaType] = useState("pepperoni");
+  // const [pizzaSize, setPizzaSize] = useState<PizzaSize>("M");
+  const pizzaType = useAppSelector(selectedPizzaType);
+  const pizzaSize = useAppSelector(selectedPizzaSize);
+
   // const [cart, setCart] = useContext(CartContext);
   // const [checkoutLoading, setCheckoutLoading] = useState(false);
   const cart = useAppSelector(selectedCartItems);
   const dispatch = useAppDispatch();
-  const { data: pizzaTypes = [], isLoading: isLoadingPizzas } = useGetPizzasQuery();
+  const { data: pizzaTypes = [], isLoading: isLoadingPizzas } =
+    useGetPizzasQuery();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const loading = isLoadingPizzas || isCheckingOut;
 
@@ -88,7 +98,7 @@ export function Order() {
             <div className="my-2.5 w-full border-b border-border p-3.75 text-center md:border-r md:border-b-0">
               <label htmlFor="pizza-type">Pizza Type</label>
               <select
-                onChange={(e) => setPizzaType(e.target.value)}
+                onChange={(e) => dispatch(setPizzaType(e.target.value))}
                 name="pizza-type"
                 value={pizzaType}
               >
@@ -105,7 +115,7 @@ export function Order() {
                 <span>
                   <input
                     checked={pizzaSize === "S"}
-                    onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
+                    onChange={(e) => dispatch(setPizzaSize(e.target.value as PizzaSize))}
                     type="radio"
                     name="pizza-size"
                     value="S"
@@ -116,7 +126,7 @@ export function Order() {
                 <span>
                   <input
                     checked={pizzaSize === "M"}
-                    onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
+                    onChange={(e) => dispatch(setPizzaSize(e.target.value as PizzaSize))}
                     type="radio"
                     name="pizza-size"
                     value="M"
@@ -127,7 +137,7 @@ export function Order() {
                 <span>
                   <input
                     checked={pizzaSize === "L"}
-                    onChange={(e) => setPizzaSize(e.target.value as PizzaSize)}
+                    onChange={(e) => dispatch(setPizzaSize(e.target.value as PizzaSize))}
                     type="radio"
                     name="pizza-size"
                     value="L"
