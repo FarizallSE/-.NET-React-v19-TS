@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+// import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
@@ -19,5 +19,5 @@ export default defineConfig({
   test: {
     environment: "happy-dom",
   },
-  plugins: [TanStackRouterVite(), react(), tailwindcss()],
+  plugins: [react(), tailwindcss()],
 });

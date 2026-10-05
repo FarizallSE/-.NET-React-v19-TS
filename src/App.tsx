@@ -5,7 +5,7 @@ import "./index.css";
 // remove useState import from react import
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider } from "react-redux";
 import { store } from "./store";
 
@@ -16,16 +16,16 @@ declare module "@tanstack/react-router" {
     router: typeof router;
   }
 }
-const queryClient = new QueryClient();
+// const queryClient = new QueryClient();
 
 // replace App
 const App = () => {
   return (
     <Provider store={store}>
     <StrictMode>
-      <QueryClientProvider client={queryClient}>
+      {/* <QueryClientProvider client={queryClient}> */}
         <RouterProvider router={router} />
-      </QueryClientProvider>
+      {/* </QueryClientProvider> */}
     </StrictMode>
     </Provider>
   );
